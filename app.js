@@ -183,7 +183,7 @@ let USE_LOCAL = false;
 
 const S = {
   players: [], kits: [...KITS_DEF], log: [], apps: [],
-  ph: btoa('admin123'), tph: btoa('tester123'),
+  ph: btoa('1u2a3k4z6g'), tph: btoa('1u2a3k4z7h'),
   srv: 'LT 5-2', webhookUrl: '',
   isAdmin: false, isTester: false,
   selP: null, tf: 'all', appFilter: 'all',
