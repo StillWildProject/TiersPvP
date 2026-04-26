@@ -494,9 +494,19 @@ function _doGrid() {
     return;
   }
 
+  // Build global rank map (position across ALL players, not just filtered)
+  const allSorted = [...S.players]
+    .filter(p => p.status !== 'banned')
+    .sort((a, b) => ord.indexOf(bestTier(a)) - ord.indexOf(bestTier(b)));
+  const rankMap = {};
+  allSorted.forEach((p, i) => { rankMap[p.id] = i + 1; });
+
   g.innerHTML = ps.map((p, i) => {
     const bt = bestTier(p), info = ti(bt);
     const sc = p.status === 'banned' ? 'banned' : p.status === 'retired' ? 'retired' : '';
+    const rank = rankMap[p.id];
+    const rankLabel = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank ? `#${rank}` : '';
+    const rankClass = rank === 1 ? 'rank-gold' : rank === 2 ? 'rank-silver' : rank === 3 ? 'rank-bronze' : 'rank-num';
     const tags = [];
     if (p.isAdmin)           tags.push(`<span class="tag t-a">ADMIN</span>`);
     if (p.isTester)          tags.push(`<span class="tag t-t">TESTER</span>`);
@@ -506,6 +516,7 @@ function _doGrid() {
     const d = i < 12 ? `animation-delay:${i*.027}s` : 'animation:none';
     return `<div class="pcard ${sc}" onclick="openProfile('${p.id}')" style="${d}">
       <div class="pcard-strip" style="background:${info.acc}"></div>
+      ${rank ? `<div class="pcard-rank ${rankClass}">${rankLabel}</div>` : ''}
       <div class="pcard-ava">
         <img src="${ava(p.nick)}" width="56" height="56" loading="lazy" decoding="async"
           onerror="this.parentNode.innerHTML='<div class=fb>${esc((p.nick||'?')[0]).toUpperCase()}</div>'">
@@ -525,6 +536,24 @@ window.openProfile = function (id) {
   showPage('pg-profile'); setTab('board');
   window.scrollTo({ top: 0, behavior: 'instant' });
 
+  // Compute global rank
+  const ord = TIERS.map(t => t.id);
+  const allSorted = [...S.players]
+    .filter(x => x.status !== 'banned')
+    .sort((a, b) => ord.indexOf(bestTier(a)) - ord.indexOf(bestTier(b)));
+  const globalRank = allSorted.findIndex(x => x.id === id) + 1;
+  const rankEmoji = globalRank === 1 ? '🥇' : globalRank === 2 ? '🥈' : globalRank === 3 ? '🥉' : null;
+
+  // Compute per-kit rank
+  const kitRankMap = {};
+  S.kits.forEach(k => {
+    const sorted = [...S.players]
+      .filter(x => x.status !== 'banned' && pt(x, k.id) !== 'UNRANKED')
+      .sort((a, b) => ord.indexOf(pt(a, k.id)) - ord.indexOf(pt(b, k.id)));
+    const pos = sorted.findIndex(x => x.id === id);
+    kitRankMap[k.id] = pos >= 0 ? pos + 1 : null;
+  });
+
   const tags = [];
   if (p.isAdmin)           tags.push(`<span class="tag t-a">ADMIN</span>`);
   if (p.isTester)          tags.push(`<span class="tag t-t">TESTER</span>`);
@@ -535,26 +564,40 @@ window.openProfile = function (id) {
   if (p.discord) meta.push('Discord: ' + esc(p.discord));
   if (p.uuid)    meta.push('UUID: ' + esc(p.uuid).slice(0, 14) + '...');
 
+  // Global rank display
+  const rankDisp = rankEmoji
+    ? `<span class="profile-rank-big">${rankEmoji}</span>`
+    : globalRank
+      ? `<span class="profile-rank-num">#${globalRank}</span>`
+      : '';
+
   document.getElementById('ph').innerHTML = `
     <div class="phero-in">
       <div class="pava-lg">
         <img src="${ava(p.nick)}" width="72" height="72" loading="eager" decoding="async"
           onerror="this.parentNode.innerHTML='<div class=fb>${esc((p.nick||'?')[0]).toUpperCase()}</div>'">
       </div>
-      <div>
-        <div class="pname">${esc(p.nick)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div class="pname">${esc(p.nick)}</div>
+          ${rankDisp}
+        </div>
         <div class="ptags">${tags.join('') || '<span style="color:var(--text3);font-size:13px">Активный</span>'}</div>
+        ${globalRank ? `<div class="profile-rank-line">Место в общем рейтинге: <b>#${globalRank}</b> из ${S.players.filter(x=>x.status!=='banned').length}</div>` : ''}
       </div>
     </div>
     ${meta.length ? `<div class="pmeta">${meta.join(' · ')}</div>` : ''}`;
 
   document.getElementById('kg').innerHTML = S.kits.map((k, i) => {
     const t = pt(p, k.id);
+    const kr = kitRankMap[k.id];
+    const krDisp = kr === 1 ? '🥇' : kr === 2 ? '🥈' : kr === 3 ? '🥉' : kr ? `#${kr}` : null;
     const d = i < 8 ? `animation-delay:${i*.03}s` : 'animation:none';
     return `<div class="kcard" style="${d}">
       <div class="kcard-ico">${k.i}</div>
       <div class="kcard-badge">${buildBadge(t, 46)}</div>
       <div class="kcard-name">${k.n}</div>
+      ${krDisp ? `<div class="kcard-rank">${krDisp}</div>` : ''}
     </div>`;
   }).join('');
 };
