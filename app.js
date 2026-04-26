@@ -306,13 +306,12 @@ function addLog(m) {
 }
 
 // ═══════════════════════════════════════
-//  INIT — exposed to HTML
+//  INIT
 // ═══════════════════════════════════════
 let _launched = false;
 function launchApp() {
   if (_launched) return;
   _launched = true;
-  document.getElementById('pg-setup').style.display = 'none';
   if (USE_LOCAL) setSyncStatus('off');
   // pre-warm badge cache
   const SIZES = [20, 26, 44, 46];
@@ -341,7 +340,7 @@ function _startFirebase(cfg) {
 //  NAVIGATION
 // ═══════════════════════════════════════
 function showPage(id) {
-  ['pg-board','pg-profile','pg-testers','pg-admin','pg-setup']
+  ['pg-board','pg-profile','pg-testers','pg-admin']
     .forEach(p => { const el = document.getElementById(p); if (el) el.style.display = 'none'; });
   const target = document.getElementById(id);
   if (target) target.style.display = '';
