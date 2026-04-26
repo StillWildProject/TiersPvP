@@ -205,40 +205,11 @@
             <button class="btn bg2 bsm" onclick="saveSet()">Сохранить</button>
             <button class="btn bg2 bsm" onclick="chPass()">Сменить пароль</button>
           </div>
-          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-            <div class="at" style="margin-bottom:8px">Firebase</div>
-            <button class="btn bg2 bsm" onclick="resetFirebase()">🔄 Перенастроить Firebase</button>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SETUP (Firebase config) -->
-  <div id="pg-setup" style="display:none">
-    <div class="page-hdr">
-      <div class="page-title">🔥 Подключение Firebase</div>
-      <div class="page-sub">Заполни данные из Firebase Console</div>
-    </div>
-    <div class="setup-card">
-      <div class="setup-steps">
-        <div class="setup-step"><div class="step-num">1</div><div class="step-txt">Зайди на <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → создай проект</div></div>
-        <div class="setup-step"><div class="step-num">2</div><div class="step-txt"><b>Build → Realtime Database → Create Database</b> → выбери регион → <b>test mode</b></div></div>
-        <div class="setup-step"><div class="step-num">3</div><div class="step-txt">Скопируй URL базы: <code>https://ИМЯ-default-rtdb.europe-west1.firebasedatabase.app</code></div></div>
-        <div class="setup-step"><div class="step-num">4</div><div class="step-txt">⚙️ → <b>Project settings → Your apps → &lt;/&gt;</b> → скопируй <code>apiKey</code>, <code>appId</code>, <code>projectId</code></div></div>
-        <div class="setup-step"><div class="step-num">5</div><div class="step-txt">В Realtime Database → <b>Rules</b> → вставь <code>".read": true, ".write": true</code> → <b>Publish</b></div></div>
-      </div>
-      <div class="config-fields">
-        <div class="cfg-row"><span class="cfg-lbl">API Key</span><input class="fi" type="text" id="cfgApiKey" placeholder="AIzaSy..."></div>
-        <div class="cfg-row"><span class="cfg-lbl">App ID</span><input class="fi" type="text" id="cfgAppId" placeholder="1:123...:web:abc..."></div>
-        <div class="cfg-row"><span class="cfg-lbl">Database URL</span><input class="fi" type="text" id="cfgDbUrl" placeholder="https://xxx-rtdb.europe-west1.firebasedatabase.app"></div>
-        <div class="cfg-row"><span class="cfg-lbl">Project ID</span><input class="fi" type="text" id="cfgProjId" placeholder="my-project-id"></div>
-      </div>
-      <button class="btn bp" style="width:100%;justify-content:center;margin-bottom:8px" onclick="initFirebase()">Подключить</button>
-      <button class="btn bg2 bsm" onclick="useLocalMode()">Работать без Firebase</button>
-      <div class="setup-note">Конфиг сохраняется в браузере — вводить повторно не нужно</div>
-    </div>
-  </div>
 
 </div><!-- #app -->
 
