@@ -1,13 +1,6 @@
 import { initializeApp }                           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, set, push, remove, onValue, update } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
-const FIREBASE_CONFIG = {
-  apiKey:      'AIzaSyD9rFMlMT4B3uaMrfDfW50fy7MxPdxpvqE',        // ← из Firebase Console
-  appId:       '1:703021307281:web:732594c02145bcc71e7630',         // ← из Firebase Console  
-  databaseURL: 'https://pvprank-653e8-default-rtdb.europe-west1.firebasedatabase.app/',   // ← https://xxx.firebasedatabase.app
-  projectId:   'pvprank-653e8',     // ← из Firebase Console
-};
-
 // ═══════════════════════════════════════
 //  TIERS
 // ═══════════════════════════════════════
@@ -183,7 +176,7 @@ let USE_LOCAL = false;
 
 const S = {
   players: [], kits: [...KITS_DEF], log: [], apps: [],
-  ph: btoa('1u2a3k4z6g'), tph: btoa('1u2a3k4z7h'),
+  ph: btoa('admin123'), tph: btoa('tester123'),
   srv: 'LT 5-2', webhookUrl: '',
   isAdmin: false, isTester: false,
   selP: null, tf: 'all', appFilter: 'all',
@@ -931,10 +924,10 @@ window.saveSet = async function () {
 //  🔥 FIREBASE CONFIG — ВСТАВЬ СВОИ ДАННЫЕ
 // ═══════════════════════════════════════
 const FIREBASE_CONFIG = {
-  apiKey:            'ТВОЙ_API_KEY',
-  appId:             'ТВОЙ_APP_ID',
-  databaseURL:       'ТВОЙ_DATABASE_URL',
-  projectId:         'ТВОЙ_PROJECT_ID',
+  apiKey:      'AIzaSyD9rFMlMT4B3uaMrfDfW50fy7MxPdxpvqE',
+  appId:       '1:703021307281:web:732594c02145bcc71e7630',
+  databaseURL: 'https://pvprank-653e8-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId:   'pvprank-653e8',
 };
 // ══════════════════════════════════════
 
