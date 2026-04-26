@@ -1,6 +1,13 @@
 import { initializeApp }                           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, set, push, remove, onValue, update } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
+const FIREBASE_CONFIG = {
+  apiKey:      'AIzaSyD9rFMlMT4B3uaMrfDfW50fy7MxPdxpvqE',        // ← из Firebase Console
+  appId:       '1:703021307281:web:732594c02145bcc71e7630',         // ← из Firebase Console  
+  databaseURL: 'https://pvprank-653e8-default-rtdb.europe-west1.firebasedatabase.app/',   // ← https://xxx.firebasedatabase.app
+  projectId:   'pvprank-653e8',     // ← из Firebase Console
+};
+
 // ═══════════════════════════════════════
 //  TIERS
 // ═══════════════════════════════════════
@@ -322,30 +329,6 @@ function launchApp() {
   if (sub) sub.textContent = `Официальный рейтинг сервера ${S.srv} · Нажми на игрока`;
 }
 
-window.initFirebase = function () {
-  const apiKey  = document.getElementById('cfgApiKey').value.trim();
-  const appId   = document.getElementById('cfgAppId').value.trim();
-  const dbUrl   = document.getElementById('cfgDbUrl').value.trim();
-  const projId  = document.getElementById('cfgProjId').value.trim();
-  if (!apiKey || !appId || !dbUrl || !projId) { toast('Заполни все поля', 'err'); return; }
-  const cfg = { apiKey, appId, databaseURL: dbUrl, projectId: projId };
-  LSs('pvr_fbcfg', cfg);
-  _startFirebase(cfg);
-};
-
-window.useLocalMode = function () {
-  USE_LOCAL = true;
-  LSs('pvr_localmode', true);
-  _localLoad();
-  launchApp();
-  renderBoard(); renderGrid();
-};
-
-window.resetFirebase = function () {
-  localStorage.removeItem('pvr_fbcfg');
-  localStorage.removeItem('pvr_localmode');
-  location.reload();
-};
 
 function _startFirebase(cfg) {
   setSyncStatus('sync');
@@ -487,8 +470,7 @@ function _doGrid() {
     if (q)              { ico='🔍'; et='Не найдено'; es='Попробуй другой запрос'; }
     else if (isSync)    { ico='⏳'; et='Загрузка...'; es='Подключаемся к Firebase'; }
     else if (isOff && !USE_LOCAL) {
-      ico='📡'; et='Нет связи с Firebase'; es='Проверь конфиг или правила базы данных';
-      extra = `<button class="btn bg2 bsm" style="margin-top:12px" onclick="resetFirebase()">🔄 Перенастроить</button>`;
+      ico='📡'; et='Нет связи с Firebase'; es='Проверь правила базы данных (Rules → .read/.write: true)';
     }
     g.innerHTML = `<div class="empty"><span class="ei">${ico}</span><div class="et">${et}</div><div class="es">${es}</div>${extra}</div>`;
     return;
@@ -944,25 +926,18 @@ window.saveSet = async function () {
   toast('Сохранено ✓');
 };
 
-// ═══════════════════════════════════════
-//  AUTO-INIT
-// ═══════════════════════════════════════
-const _saved     = LSg('pvr_fbcfg');
-const _localMode = LSg('pvr_localmode');
 
-// Always show app shell immediately
-document.getElementById('pg-setup').style.display = 'none';
+// ═══════════════════════════════════════
+//  🔥 FIREBASE CONFIG — ВСТАВЬ СВОИ ДАННЫЕ
+// ═══════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:            'ТВОЙ_API_KEY',
+  appId:             'ТВОЙ_APP_ID',
+  databaseURL:       'ТВОЙ_DATABASE_URL',
+  projectId:         'ТВОЙ_PROJECT_ID',
+};
+// ══════════════════════════════════════
+
+// Запуск
 showPage('pg-board'); setTab('board');
-
-if (_localMode) {
-  USE_LOCAL = true;
-  _localLoad();
-  launchApp();
-  renderBoard(); renderGrid();
-} else if (_saved) {
-  setSyncStatus('sync');
-  _startFirebase(_saved);
-} else {
-  // Show setup page
-  showPage('pg-setup');
-}
+_startFirebase(FIREBASE_CONFIG);
