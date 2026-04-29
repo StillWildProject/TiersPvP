@@ -16,13 +16,135 @@ export const TIERS = [
   { id:'UNRANKED', l:'?', n:'Unranked', c1:'#252d3a', c2:'#1a2030', glow:null, acc:'#2a3448', stars:0, crown:false },
 ];
 
+// ── Kit SVG icons (inline, no external files needed) ──
+const KIT_ICONS = {
+  sword: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M26 4L6 24" stroke="#7ecfff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M26 4L28 8L24 6Z" fill="#b0e0ff"/>
+    <path d="M6 24L4 28L8 26Z" fill="#7ecfff"/>
+    <path d="M10 20L12 22" stroke="#b0e0ff" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M8 18L10 20" stroke="#7ecfff" stroke-width="2" stroke-linecap="round"/>
+    <rect x="4.5" y="21.5" width="5" height="2.5" rx="1" transform="rotate(-45 4.5 21.5)" fill="#a0c8e0"/>
+  </svg>`,
+
+  axe: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 22L22 10" stroke="#c0d0e0" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M22 10C24 7 28 6 28 6C28 6 27 10 24 12L20 14L18 12Z" fill="#b0bec5" stroke="#90a4ae" stroke-width="1"/>
+    <path d="M10 22L8 25L11 26L14 24L12 22Z" fill="#90a4ae"/>
+    <circle cx="16" cy="16" r="2" fill="#cfd8dc" opacity="0.5"/>
+  </svg>`,
+
+  nodebuff: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="16" cy="20" rx="7" ry="9" fill="#d946a0" opacity="0.15"/>
+    <ellipse cx="16" cy="20" rx="7" ry="9" stroke="#f472b6" stroke-width="1.5"/>
+    <path d="M13 8C13 6.34 14.34 5 16 5C17.66 5 19 6.34 19 8V11H13V8Z" fill="#f9a8d4" stroke="#f472b6" stroke-width="1.2"/>
+    <path d="M12 14H20" stroke="#f9a8d4" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="16" cy="20" r="3" fill="#f472b6" opacity="0.6"/>
+    <path d="M14 19L16 21L18 18" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+
+  pot: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="16" cy="22" rx="8" ry="6" fill="#9f60ea" opacity="0.2"/>
+    <path d="M8 16C8 12 10 10 16 10C22 10 24 12 24 16L22 24H10L8 16Z" fill="#7c3aed" opacity="0.7" stroke="#a78bfa" stroke-width="1.2"/>
+    <ellipse cx="16" cy="16" rx="8" ry="4" fill="#8b5cf6" opacity="0.5"/>
+    <path d="M14 6C14 5 15 4 16 4C17 4 18 5 18 6V9H14V6Z" fill="#c4b5fd" stroke="#a78bfa" stroke-width="1"/>
+    <path d="M12 20C12 20 14 22 16 22C18 22 20 20 20 20" stroke="#c4b5fd" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="13" cy="17" r="1.5" fill="#ddd6fe" opacity="0.6"/>
+  </svg>`,
+
+  uhc: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 4L19.5 13H29L21.5 18.5L24.5 27.5L16 22L7.5 27.5L10.5 18.5L3 13H12.5Z" fill="#fbbf24" opacity="0.2" stroke="#f59e0b" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M16 7L18.5 14H26L20 18L22.5 25L16 21L9.5 25L12 18L6 14H13.5Z" fill="#fcd34d" opacity="0.7"/>
+    <circle cx="16" cy="17" r="3" fill="#fef3c7"/>
+  </svg>`,
+
+  stickfight: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 26L26 6" stroke="#c084fc" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="26" cy="6" r="3" fill="#e879f9" opacity="0.8"/>
+    <circle cx="6" cy="26" r="2" fill="#a855f7" opacity="0.7"/>
+    <path d="M20 8L24 12" stroke="#e9d5ff" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <circle cx="14" cy="14" r="2.5" fill="#d8b4fe" opacity="0.4"/>
+    <path d="M10 10L13 13" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  </svg>`,
+
+  soup: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 15H25L23 23H9L7 15Z" fill="#92400e" opacity="0.4" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="16" cy="15" rx="9" ry="3.5" fill="#b45309" opacity="0.5" stroke="#f59e0b" stroke-width="1"/>
+    <path d="M10 12C10 10 11 9 13 9" stroke="#fcd34d" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M14 11C14 9 15 8 17 8" stroke="#fcd34d" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="13" cy="18" r="1.5" fill="#fde68a" opacity="0.6"/>
+    <circle cx="18" cy="20" r="1" fill="#fde68a" opacity="0.5"/>
+    <path d="M9 23H23" stroke="#d97706" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  </svg>`,
+
+  bow: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 4C10 10 10 22 8 28" stroke="#86efac" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M8 4C12 8 18 16 8 28" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <path d="M8 4L8 28" stroke="#86efac" stroke-width="1" stroke-dasharray="2 2" opacity="0.4"/>
+    <path d="M8 16H24" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M22 13L26 16L22 19" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1" stroke-linejoin="round"/>
+    <circle cx="8" cy="4" r="1.5" fill="#4ade80" opacity="0.8"/>
+    <circle cx="8" cy="28" r="1.5" fill="#4ade80" opacity="0.8"/>
+  </svg>`,
+
+  builduhc: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="18" width="8" height="8" rx="1" fill="#78350f" stroke="#d97706" stroke-width="1"/>
+    <rect x="14" y="12" width="8" height="14" rx="1" fill="#92400e" stroke="#f59e0b" stroke-width="1"/>
+    <rect x="24" y="6" width="5" height="20" rx="1" fill="#b45309" stroke="#fbbf24" stroke-width="1"/>
+    <path d="M3 26H30" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M16 4L19.5 10H12.5Z" fill="#fcd34d" opacity="0.7"/>
+  </svg>`,
+
+  combo: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="16" r="5" fill="#ff6b6b" opacity="0.2" stroke="#ff4757" stroke-width="1.2"/>
+    <circle cx="22" cy="16" r="5" fill="#ffa502" opacity="0.2" stroke="#ff6348" stroke-width="1.2"/>
+    <path d="M7 14L10 17L13 12" stroke="#ff4757" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M19 13L22 16L25 11" stroke="#ff6348" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M14 16H18" stroke="#ff6b35" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M16 14L18 16L16 18" stroke="#ff6b35" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+
+  spleef: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="22" width="24" height="5" rx="1" fill="#38bdf8" opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
+    <rect x="4" y="22" width="7" height="5" rx="1" fill="#0ea5e9" opacity="0.5"/>
+    <rect x="13" y="22" width="7" height="5" rx="1" fill="#0284c7" opacity="0.5"/>
+    <path d="M16 4C18 8 20 12 16 16C12 20 10 20 12 24" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    <circle cx="11" cy="10" r="3.5" fill="#bae6fd" opacity="0.25" stroke="#7dd3fc" stroke-width="1.2"/>
+    <path d="M9 9L11 12L14 8" stroke="#7dd3fc" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+
+  bedwars: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="18" width="24" height="8" rx="2" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="6" y="14" width="20" height="6" rx="1.5" fill="#1e40af" stroke="#60a5fa" stroke-width="1"/>
+    <rect x="6" y="13" width="7" height="4" rx="1" fill="#eff6ff" opacity="0.9"/>
+    <rect x="19" y="13" width="7" height="4" rx="1" fill="#eff6ff" opacity="0.9"/>
+    <path d="M4 22H28" stroke="#3b82f6" stroke-width="1" opacity="0.4"/>
+    <rect x="6" y="26" width="3" height="3" rx="0.5" fill="#1d4ed8"/>
+    <rect x="23" y="26" width="3" height="3" rx="0.5" fill="#1d4ed8"/>
+    <circle cx="10" cy="15" r="1.5" fill="#93c5fd" opacity="0.5"/>
+    <circle cx="22" cy="15" r="1.5" fill="#93c5fd" opacity="0.5"/>
+  </svg>`,
+};
+
+function kitIcon(k) {
+  const svg = KIT_ICONS[k.id];
+  if (!svg) return `<span style="font-size:20px">${k.i}</span>`;
+  return svg;
+}
+
 const KITS_DEF = [
-  {id:'sword',n:'Sword',i:'⚔'}, {id:'axe',n:'Axe',i:'🪓'},
-  {id:'nodebuff',n:'NoDebuff',i:'💊'}, {id:'pot',n:'Pot',i:'🧪'},
-  {id:'uhc',n:'UHC',i:'🏆'}, {id:'stickfight',n:'StickFight',i:'🪄'},
-  {id:'soup',n:'Soup',i:'🍲'}, {id:'bow',n:'Bow',i:'🏹'},
-  {id:'builduhc',n:'BuildUHC',i:'🏗'}, {id:'combo',n:'Combo',i:'💥'},
-  {id:'spleef',n:'Spleef',i:'❄'}, {id:'bedwars',n:'BedWars',i:'🛏'},
+  {id:'sword',     n:'Sword',     i:'⚔'},
+  {id:'axe',       n:'Axe',       i:'🪓'},
+  {id:'nodebuff',  n:'NoDebuff',  i:'💊'},
+  {id:'pot',       n:'Pot',       i:'🧪'},
+  {id:'uhc',       n:'UHC',       i:'🏆'},
+  {id:'stickfight',n:'StickFight',i:'🪄'},
+  {id:'soup',      n:'Soup',      i:'🍲'},
+  {id:'bow',       n:'Bow',       i:'🏹'},
+  {id:'builduhc',  n:'BuildUHC',  i:'🏗'},
+  {id:'combo',     n:'Combo',     i:'💥'},
+  {id:'spleef',    n:'Spleef',    i:'❄'},
+  {id:'bedwars',   n:'BedWars',   i:'🛏'},
 ];
 
 // ═══════════════════════════════════════
@@ -568,7 +690,7 @@ window.openProfile = function (id) {
     const krDisp = kr === 1 ? '🥇' : kr === 2 ? '🥈' : kr === 3 ? '🥉' : kr ? `#${kr}` : null;
     const d = i < 8 ? `animation-delay:${i*.03}s` : 'animation:none';
     return `<div class="kcard" style="${d}">
-      <div class="kcard-ico">${k.i}</div>
+      <div class="kcard-ico">${kitIcon(k)}</div>
       <div class="kcard-badge">${buildBadge(t, 46)}</div>
       <div class="kcard-name">${k.n}</div>
       ${krDisp ? `<div class="kcard-rank">${krDisp}</div>` : ''}
@@ -584,7 +706,8 @@ function renderTesters() {
   document.getElementById('apKitChecks').innerHTML = S.kits.map(k =>
     `<label class="kit-check">
       <input type="checkbox" name="apkit" value="${k.id}">
-      <span>${k.i} ${k.n}</span>
+      <span class="kit-svg">${kitIcon(k)}</span>
+      <span>${k.n}</span>
     </label>`
   ).join('');
 
