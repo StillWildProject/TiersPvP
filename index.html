@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PvPRanks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="tw" id="tw"></div>
+
+<!-- LOGIN -->
+<div class="lw" id="lw" style="display:none">
+  <div class="lb">
+    <div class="lt3" id="lwTitle">🔐 Вход</div>
+    <div class="ls" id="lwSub">Панель администратора</div>
+    <div class="fg"><label class="fl">Пароль</label><input class="fi" type="password" id="lpass" placeholder="••••••••"></div>
+    <button class="btn bp" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doLogin()">Войти</button>
+    <button class="btn bg2" style="width:100%;justify-content:center" onclick="hideLg()">Отмена</button>
+    <div class="lerr" id="lerr">Неверный пароль</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <span class="logo" onclick="goBoard()">PvP<em>Ranks</em></span>
+  <div class="nav-tabs">
+    <button class="ntab active" id="tb-board" onclick="goBoard()">Рейтинг</button>
+    <button class="ntab" id="tb-testers" onclick="goTesters()">🧪 Тестеры</button>
+    <button class="ntab" id="tb-admin" onclick="reqAdmin()">⚙ Панель</button>
+  </div>
+  <div class="nav-r">
+    <span class="sync-dot sync" id="syncDot" title="Подключение..."></span>
+    <div class="sw">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="nsearch" type="text" placeholder="Поиск..." id="si" oninput="renderGrid()" autocomplete="off">
+    </div>
+    <button class="btn bg2 bsm" id="alout" style="display:none" onclick="logout()">Выйти</button>
+  </div>
+</nav>
+
+<!-- BOTTOM NAV -->
+<div class="bnav" id="bnav">
+  <button class="bnb active" id="bn-board" onclick="goBoard()"><span class="bnico">🏆</span>Рейтинг</button>
+  <button class="bnb" id="bn-testers" onclick="goTesters()"><span class="bnico">🧪</span>Тестеры</button>
+  <button class="bnb" id="bn-admin" onclick="reqAdmin()"><span class="bnico">⚙️</span>Панель</button>
+</div>
+
+<div id="app">
+
+  <!-- BOARD -->
+  <div id="pg-board">
+    <div class="page-hdr">
+      <div class="page-title">Рейтинг</div>
+      <div class="page-sub" id="bsub">Официальный рейтинг · Нажми на игрока</div>
+    </div>
+    <div class="srow" id="srow"></div>
+    <div class="frow" id="frow"></div>
+    <div class="pgrid" id="pgrid"></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="pg-profile" style="display:none">
+    <button class="back" onclick="goBoard()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Назад
+    </button>
+    <div class="phero" id="ph"></div>
+    <div class="slabel" style="margin-top:14px">Ранги по китам</div>
+    <div class="kgrid" id="kg"></div>
+  </div>
+
+  <!-- TESTERS -->
+  <div id="pg-testers" style="display:none">
+    <div class="page-hdr">
+      <div class="page-title">🧪 Тестеры</div>
+      <div class="page-sub">Подай заявку на проверку рейтинга</div>
+    </div>
+
+    <!-- Apply form -->
+    <div class="apply-card" id="applyCard">
+      <div class="apply-title">Подать заявку</div>
+      <div class="apply-sub">Тестер проверит твой рейтинг и выдаст ранг</div>
+      <div class="fg"><label class="fl">Твой ник в Minecraft</label><input class="fi" type="text" id="apNick" placeholder="Steve"></div>
+      <div class="fg"><label class="fl">Discord (для связи)</label><input class="fi" type="text" id="apDis" placeholder="@username"></div>
+      <div class="fg">
+        <label class="fl">Киты для проверки</label>
+        <div class="kit-checks" id="apKitChecks"></div>
+      </div>
+      <div class="fg"><label class="fl">Комментарий</label>
+        <textarea class="ftxt" id="apComment" placeholder="Примерный рейтинг, когда удобно играть..."></textarea>
+      </div>
+      <button class="btn bor" onclick="submitApp()">📨 Отправить заявку</button>
+    </div>
+
+    <!-- Tester login -->
+    <div id="tLoginSection">
+      <div class="tlogin-wrap" id="tLoginCard" style="display:none">
+        <div style="font-size:15px;font-weight:800;margin-bottom:12px">🔑 Вход тестера</div>
+        <div class="fg"><input class="fi" type="password" id="tpass" placeholder="Пароль тестера"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bor bsm" onclick="doTLogin()">Войти</button>
+          <button class="btn bg2 bsm" onclick="hideTLogin()">Отмена</button>
+        </div>
+        <div class="lerr" id="tlerr" style="display:none">Неверный пароль</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <button class="btn bor bsm" id="tLoginBtn" onclick="showTLogin()">🔑 Вход тестера</button>
+        <button class="btn bg2 bsm" id="tLogoutBtn" style="display:none" onclick="tLogout()">Выйти</button>
+      </div>
+    </div>
+
+    <!-- Apps (testers only) -->
+    <div id="appsSection" style="display:none">
+      <div class="sec-hdr">
+        <div class="sec-title">Заявки</div>
+        <div class="sec-count" id="appsCount">0</div>
+      </div>
+      <div class="app-filter-row" id="appFilterRow"></div>
+      <div class="app-list" id="appList"></div>
+    </div>
+
+    <!-- Tester list (always visible) -->
+    <div style="margin-top:24px">
+      <div class="sec-hdr">
+        <div class="sec-title">Команда тестеров</div>
+        <div class="sec-count" id="testerCount">0</div>
+      </div>
+      <div class="tester-list" id="testerList"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="pg-admin" style="display:none">
+    <div class="page-hdr">
+      <div class="page-title">⚙ Панель</div>
+      <div class="page-sub">Данные синхронизируются в реальном времени</div>
+    </div>
+    <div class="agrid">
+      <!-- Left col -->
+      <div class="acol">
+        <div class="acard">
+          <div class="at">Игроки</div>
+          <input class="fi" type="text" placeholder="Поиск..." id="as" oninput="rAL()" style="margin-bottom:8px">
+          <div class="apl" id="apl"></div>
+        </div>
+        <div class="acard">
+          <div class="at">Лог действий</div>
+          <div class="lgl" id="lgl"></div>
+        </div>
+      </div>
+      <!-- Right col -->
+      <div class="acol">
+        <div class="acard">
+          <div class="at" id="ft">Добавить игрока</div>
+          <div class="fg"><label class="fl">Ник</label><input class="fi" type="text" id="fNick" placeholder="Steve"></div>
+          <div class="fr">
+            <div class="fg"><label class="fl">UUID</label><input class="fi" type="text" id="fUUID" placeholder="необязательно"></div>
+            <div class="fg"><label class="fl">Discord</label><input class="fi" type="text" id="fDis" placeholder="@user"></div>
+          </div>
+          <div class="fg"><label class="fl">Статус</label>
+            <select class="fsel" id="fSt">
+              <option value="active">Активный</option>
+              <option value="retired">Retired</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+          <div class="fcheckrow">
+            <div class="fck"><input type="checkbox" id="fVer"><label for="fVer">Verified</label></div>
+            <div class="fck"><input type="checkbox" id="fAdm"><label for="fAdm">Admin</label></div>
+            <div class="fck"><input type="checkbox" id="fTst"><label for="fTst">Тестер</label></div>
+          </div>
+          <div class="at" style="margin-bottom:8px">Ранги по китам</div>
+          <div id="krf" class="krf-grid"></div>
+          <div class="form-actions">
+            <button class="btn bp" onclick="saveP()">Сохранить</button>
+            <button class="btn bg2" onclick="clrF()">Очистить</button>
+            <button class="btn bd bsm" id="delbtn" style="display:none;margin-left:auto" onclick="delP()">Удалить</button>
+          </div>
+          <input type="hidden" id="fId">
+        </div>
+
+        <div class="acard">
+          <div class="at">Киты</div>
+          <div class="fr">
+            <div class="fg"><label class="fl">Название</label><input class="fi" type="text" id="nkn" placeholder="Berserk"></div>
+            <div class="fg"><label class="fl">Иконка</label><input class="fi" type="text" id="nki" placeholder="⚔"></div>
+          </div>
+          <button class="btn bgn bsm" onclick="addKit()">+ Добавить</button>
+          <div id="kml" class="kml"></div>
+        </div>
+
+        <div class="acard">
+          <div class="at">Настройки</div>
+          <div class="fg"><label class="fl">Название сервера</label><input class="fi" type="text" id="srvn"></div>
+          <div class="fg"><label class="fl">Discord Webhook URL</label><input class="fi" type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/..."></div>
+          <div class="fg"><label class="fl">Пароль тестеров</label><input class="fi" type="text" id="tpwd" placeholder="tester123"></div>
+          <div class="fg"><label class="fl">Новый пароль админа</label><input class="fi" type="password" id="np1" placeholder="••••••••"></div>
+          <div class="fg"><label class="fl">Подтверждение</label><input class="fi" type="password" id="np2" placeholder="••••••••"></div>
+          <div class="form-actions">
+            <button class="btn bg2 bsm" onclick="saveSet()">Сохранить</button>
+            <button class="btn bg2 bsm" onclick="chPass()">Сменить пароль</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- #app -->
+
+<!-- Firebase SDK -->
+<script type="module" src="app.js"></script>
+</body>
+</html>
